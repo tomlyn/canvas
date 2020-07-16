@@ -87,6 +87,13 @@ _defineConstant("MODAL", "Modal");
 _defineConstant("CUSTOM", "Custom");
 _defineConstant("EDITING", "Editing");
 
+_defineConstant("TOOLBAR_LAYOUT_NONE", "None");
+_defineConstant("TOOLBAR_LAYOUT_TOP", "Top");
+
+_defineConstant("TOOLBAR_TYPE_DEFAULT", "Default");
+_defineConstant("TOOLBAR_TYPE_T1", "Toolbar1");
+_defineConstant("TOOLBAR_TYPE_T2", "Toolbar2");
+
 _defineConstant("CHOOSE_FROM_LOCATION", "Choose from location...");
 
 _defineConstant("PALETTE_TOOLTIP", "Click to show node palette");

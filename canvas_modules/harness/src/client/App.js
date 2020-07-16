@@ -67,7 +67,7 @@ import CustomOpSyntaxCheck from "./custom/condition-ops/customSyntaxCheck";
 
 import BlankCanvasImage from "../../assets/images/blank_canvas.svg";
 
-import { Play32, StopFilledAlt32 } from "@carbon/icons-react";
+import { Edit32, Play32, StopFilledAlt32 } from "@carbon/icons-react";
 
 import {
 	SIDE_PANEL_CANVAS,
@@ -98,7 +98,9 @@ import {
 	NOTIFICATION_MESSAGE_TYPE,
 	FORMS,
 	PARAMETER_DEFS,
-	PRIMARY
+	PRIMARY,
+	TOOLBAR_LAYOUT_TOP,
+	TOOLBAR_TYPE_DEFAULT
 } from "./constants/constants.js";
 
 import listview32 from "../graphics/list-view_32.svg";
@@ -147,6 +149,8 @@ export default class App extends React.Component {
 			selectedInteractionType: INTERACTION_MOUSE,
 			selectedConnectionType: PORTS_CONNECTION,
 			selectedNodeFormat: VERTICAL_FORMAT,
+			selectedToolbarLayout: TOOLBAR_LAYOUT_TOP,
+			selectedToolbarType: TOOLBAR_TYPE_DEFAULT,
 			selectedSaveZoom: NONE_SAVE_ZOOM,
 			selectedZoomIntoSubFlows: false,
 			selectedLinkType: CURVE_LINKS,
@@ -1612,6 +1616,7 @@ export default class App extends React.Component {
 			enableDragWithoutSelect: this.state.selectedDragWithoutSelect,
 			enableAssocLinkCreation: this.state.selectedAssocLinkCreation,
 			enablePaletteLayout: this.state.selectedPaletteLayout,
+			enableToolbarLayout: this.state.selectedToolbarLayout,
 			emptyCanvasContent: emptyCanvasDiv,
 			enableInsertNodeDroppedOnLink: this.state.selectedInsertNodeDroppedOnLink,
 			enableMoveNodesOnSupernodeResize: this.state.selectedMoveNodesOnSupernodeResize,
@@ -1650,24 +1655,56 @@ export default class App extends React.Component {
 			enableNarrowPalette: this.state.selectedNarrowPalette
 		};
 
-		const toolbarConfig = [
-			{ action: "palette", label: "Palette", enable: true },
-			{ divider: true },
-			{ action: "stopit", label: "Stop Execution", enable: false,
-				iconEnabled: (<StopFilledAlt32 className="harness-toolbar-icon" />), iconDisabled: (<StopFilledAlt32 className="harness-toolbar-icon" />) },
-			{ action: "runit", label: "Run Pipeline", enable: true,
-				iconEnabled: (<Play32 className="harness-toolbar-icon" />), iconDisabled: (<Play32 className="harness-toolbar-icon" />) },
-			{ divider: true },
-			{ action: "undo", label: "Undo", enable: true },
-			{ action: "redo", label: "Redo", enable: true },
-			{ action: "cut", label: "Cut", enable: true },
-			{ action: "copy", label: "Copy", enable: true },
-			{ action: "paste", label: "Paste", enable: true },
-			{ action: "createAutoComment", label: "Add Comment", enable: true },
-			{ action: "deleteSelectedObjects", label: "Delete", enable: true },
-			{ action: "arrangeHorizontally", label: "Arrange Horizontally", enable: true },
-			{ action: "arrangeVertically", label: "Arrange Vertically", enable: true }
-		];
+
+		let toolbarConfig = null;
+		if (this.state.selectedToolbarType === "Default") {
+			toolbarConfig = null;
+
+		} else if (this.state.selectedToolbarType === "Toolbar1") {
+			toolbarConfig = [
+				{ action: "palette", label: "Palette", enable: true },
+				{ divider: true },
+				{ action: "stopit", label: "Stop Execution", enable: false,
+					iconEnabled: (<StopFilledAlt32 className="harness-toolbar-icon" />), iconDisabled: (<StopFilledAlt32 className="harness-toolbar-icon" />) },
+				{ action: "runit", label: "Run Pipeline", enable: true, kind: "Primary",
+					iconEnabled: (<Play32 className="harness-toolbar-icon" />), iconDisabled: (<Play32 className="harness-toolbar-icon" />) },
+				{ divider: true },
+				{ action: "undo", label: "Undo", enable: true },
+				{ action: "redo", label: "Redo", enable: true },
+				{ action: "cut", label: "Cut", enable: true },
+				{ action: "copy", label: "Copy", enable: true },
+				{ action: "paste", label: "Paste", enable: true },
+				{ action: "createAutoComment", label: "Add Comment", enable: true },
+				{ action: "deleteSelectedObjects", label: "Delete", enable: true },
+				{ action: "arrangeHorizontally", label: "Arrange Horizontally", enable: true },
+				{ action: "arrangeVertically", label: "Arrange Vertically", enable: true }
+			];
+
+		} else if (this.state.selectedToolbarType === "Toolbar2") {
+			toolbarConfig = {
+				leftBar: [
+					{ action: "custom", label: "Custom", enable: true, incLabelWithIcon: "before", iconEnabled: (<Edit32 />), iconDisabled: (<Edit32 />) },
+					{ action: "undo", label: this.getLabel("canvas.undo"), enable: true, incLabelWithIcon: "after" },
+					{ action: "redo", label: this.getLabel("canvas.redo"), enable: true },
+					{ action: "cut", label: this.getLabel("edit.cutSelection"), enable: true },
+					{ action: "copy", label: this.getLabel("edit.copySelection"), enable: true },
+					{ action: "paste", label: this.getLabel("edit.pasteSelection"), enable: true },
+					{ divider: true },
+					{ action: "createAutoComment", label: this.getLabel("canvas.addComment"), enable: true }
+				],
+				rightBar: [
+					{ action: "deleteSelectedObjects", label: this.getLabel("canvas.deleteObject"), incLabelWithIcon: "before", enable: true },
+					{ divider: true },
+					{ action: "deleteSelectedObjects", incLabelWithIcon: "before", label: "2", enable: true, iconEnabled: (<Edit32 />), iconDisabled: (<Edit32 />) },
+					{ action: "deleteSelectedObjects3", incLabelWithIcon: "before", label: "33", enable: true, iconEnabled: (<Edit32 />), iconDisabled: (<Edit32 />) },
+					{ action: "deleteSelectedObjects4", incLabelWithIcon: "before", label: "444", enable: false, iconEnabled: (<Edit32 />), iconDisabled: (<Edit32 />) },
+					{ action: "zoomIn", label: this.getLabel("toolbar.zoomIn"), enable: true },
+					{ action: "zoomOut", label: this.getLabel("toolbar.zoomOut"), enable: true },
+					{ action: "custom1", label: "Custom11111", enable: true, incLabelWithIcon: "before", iconEnabled: (<Edit32 />), iconDisabled: (<Edit32 />) },
+					{ action: "zoomToFit", label: this.getLabel("toolbar.zoomToFit"), enable: true }
+				]
+			};
+		}
 
 		const contextMenuConfig = {
 			enableCreateSupernodeNonContiguous: this.state.selectedCreateSupernodeNonContiguous,
@@ -1838,7 +1875,7 @@ export default class App extends React.Component {
 							contextMenuHandler={this.contextMenuHandler}
 							editActionHandler= {this.extraCanvasEditActionHandler}
 							clickActionHandler= {this.extraCanvasClickActionHandler}
-							toolbarConfig={toolbarConfig}
+							toolbarConfig={this.toolbarConfig}
 							canvasController={this.canvasController2}
 							notificationConfig={this.state.notificationConfig2}
 							rightFlyoutContent={rightFlyoutContent2}

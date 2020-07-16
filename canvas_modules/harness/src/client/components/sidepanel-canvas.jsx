@@ -68,7 +68,12 @@ import {
 	TIP_PALETTE,
 	TIP_NODES,
 	TIP_PORTS,
-	TIP_LINKS
+	TIP_LINKS,
+	TOOLBAR_LAYOUT_NONE,
+	TOOLBAR_LAYOUT_TOP,
+	TOOLBAR_TYPE_DEFAULT,
+	TOOLBAR_TYPE_T1,
+	TOOLBAR_TYPE_T2
 } from "../constants/constants.js";
 import FormsService from "../services/FormsService";
 
@@ -928,6 +933,48 @@ export default class SidePanelForms extends React.Component {
 			</div>
 		</div>);
 
+		var toolbarLayout = (<div className="harness-sidepanel-children" id="harness-sidepanel-toolbar-layout">
+			<div className="harness-sidepanel-headers">Toolbar Layout</div>
+			<RadioButtonGroup
+				name="selectedToolbarLayout" // Set name to corresponding field name in App.js
+				className="harness-sidepanel-radio-group"
+				onChange={this.setStateValue}
+				defaultSelected={this.props.getStateValue("selectedToolbarLayout")}
+			>
+				<RadioButton
+					value={TOOLBAR_LAYOUT_NONE}
+					labelText={TOOLBAR_LAYOUT_NONE}
+				/>
+				<RadioButton
+					value={TOOLBAR_LAYOUT_TOP}
+					labelText={TOOLBAR_LAYOUT_TOP}
+				/>
+			</RadioButtonGroup>
+		</div>);
+
+		var toolbarType = (<div className="harness-sidepanel-children" id="harness-sidepanel-toolbar-type">
+			<div className="harness-sidepanel-headers">Toolbar Type</div>
+			<RadioButtonGroup
+				name="selectedToolbarType" // Set name to corresponding field name in App.js
+				className="harness-sidepanel-radio-group"
+				onChange={this.setStateValue}
+				defaultSelected={this.props.getStateValue("selectedToolbarType")}
+			>
+				<RadioButton
+					value={TOOLBAR_TYPE_DEFAULT}
+					labelText={TOOLBAR_TYPE_DEFAULT}
+				/>
+				<RadioButton
+					value={TOOLBAR_TYPE_T1}
+					labelText={TOOLBAR_TYPE_T1}
+				/>
+				<RadioButton
+					value={TOOLBAR_TYPE_T2}
+					labelText={TOOLBAR_TYPE_T2}
+				/>
+			</RadioButtonGroup>
+		</div>);
+
 		var tipConfig = (<div className="harness-sidepanel-children" id="harness-sidepanel-tip-config">
 			<div className="harness-sidepanel-headers">Tips</div>
 			<Checkbox
@@ -1150,6 +1197,10 @@ export default class SidePanelForms extends React.Component {
 					{saveZoom}
 					{divider}
 					{paletteLayout}
+					{divider}
+					{toolbarLayout}
+					{divider}
+					{toolbarType}
 					{divider}
 					{enablePanIntoViewOnOpen}
 					{divider}

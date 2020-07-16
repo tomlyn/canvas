@@ -18,81 +18,94 @@
 
 $toolbar-icon-label-margin: 8px;
 $toolbar-icon-size: 16px;
-$toolbar-button-width: 40px;
+$toolbar-button-height: 40px;
 $toolbar-divider-width: 1px;
-$toolbar-default-icons-count: 5;
 
-// sass-lint:disable no-misspelled-properties
-:export {
-	toolbarButtonWidth: $toolbar-button-width;
-	toolbarDividerWidth: $toolbar-divider-width;
-}
-// sass-lint:enable no-misspelled-properties
-
-#canvas-toolbar {
-	height: $toolbar-button-width;
-	min-width: ($toolbar-button-width * $toolbar-default-icons-count) + $toolbar-divider-width;
+.toolbar-div {
+	height: $toolbar-button-height;
 	width: 100%;
 	background-color: $ui-01;
 	border-bottom: $toolbar-divider-width solid $ui-04;
 	box-sizing: content-box;
 	position: relative;
-}
-
-.toolbar-fixed-location {
-	position: fixed;
-	z-index: 2;
-}
-
-#toolbar-items {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-
 	display: flex;
 }
 
 .toolbar-items-container {
 	display: flex;
+
+	&.toolbar-right-items-container {
+		position: absolute;
+		right: 2px; // accommodate notification onClick border
+	}
 }
 
-#zoom-actions-container {
+.toolbar-hidden {
+	opacity: 0;
+}
+
+.toolbar-text-content {
 	position: absolute;
-	right: 2px; // accommodate notification onClick border
+	z-index: 2;
+	top: 15px;
+	font-size: 9px;
+	line-height: 9px;
+	color: $icon-01;
 }
 
-.list-item-containers {
-	&.notificationCounterIcon {
-		.toolbar-item {
-			position: relative;
-		}
-		.text-content {
-			position: absolute;
-			z-index: 2;
-			top: 13px;
-			font-size: 9px;
-			line-height: 9px;
-			color: $icon-01;
-		}
+.toolbar-button-item {
+	height: auto;
+	display: block;
+	padding: 0;
+	min-height: $toolbar-button-height;
+	justify-content: center;
+	user-select: none;
+
+	&.overflow {
+		height: auto;
+		display: block;
 	}
 
-	.list-item {
-		padding: 0;
-		min-height: $toolbar-button-width;
-		width: $toolbar-button-width;
-		display: flex;
-		justify-content: center;
-		user-select: none;
-
-		&.overflow {
-			height: auto;
-			width: 200px;
-			display: block;
-		}
-	}
-
-	.list-item-disabled svg {
+	&.disabled svg {
 		fill: $disabled-02;
+	}
+}
+
+.toolbar-item {
+	// set height/width for tooltip
+	width: inherit;
+	padding: 8px 11px;
+	display: flex;
+	justify-content: center;
+	color: $icon-01; // Used by label and also picked up by currentColor inside icons
+
+	&.overflow {
+		width: 200px;
+		padding: 8px;
+		justify-content: left;
+	}
+
+	&.disabled {
+		color: $disabled-02; // Used by label and also picked up by currentColor inside icons
+	}
+
+	svg {
+		height: $toolbar-icon-size;
+		width: $toolbar-icon-size;
+		margin: auto;
+		/* Prevent elements from being dragged onto canvas */
+		-webkit-user-drag: none;
+	}
+}
+
+.toolbar-icon-label {
+	padding-right: 5px;
+
+	&.overflow {
+		width: 100%;
+		padding-left: 8px;
+		word-break: break-word;
+		hyphens: auto;
 	}
 }
 
@@ -100,49 +113,13 @@ $toolbar-default-icons-count: 5;
 	border-right: $toolbar-divider-width solid $ui-03;
 }
 
-.overflow-toolbar-divider {
+.toolbar-divider-overflow {
 	border-bottom: $toolbar-divider-width solid $ui-03;
-}
-
-.toolbar-item {
-	// set height/width for tooltip
-	height: 34px;
-	width: 34px;
-
-	display: flex;
-	justify-content: center;
-	&.overflow {
-		width: inherit;
-		padding: 8px;
-
-		svg {
-			margin-right: 8px;
-		}
-	}
-}
-
-.toolbar-icons, .toolbar-item > svg {
-	height: $toolbar-icon-size;
-	width: $toolbar-icon-size;
-	margin: auto;
-	/* Prevent elements from being dragged onto canvas */
-	-webkit-user-drag: none;
-}
-
-.overflow-toolbar-icon-label {
-	color: $text-01;
-	width: 100%;
-	word-break: break-word;
-	hyphens: auto;
-
-	&.disabled {
-		color: $disabled-02;
-	}
 }
 
 .toolbar-popover-list {
 	z-index: 1;
-	top: calc(#{$toolbar-button-width} + #{$toolbar-divider-width});
+	top: calc(#{$toolbar-button-height} + #{$toolbar-divider-width});
 	display: block;
 	position: absolute;
 	list-style-type: none;
