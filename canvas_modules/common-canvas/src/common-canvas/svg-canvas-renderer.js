@@ -2174,8 +2174,6 @@ export default class SVGCanvasRenderer {
 			// Limit the size a drag can be so, when the user is dragging objects in
 			// an in-place subflow they do not drag them too far.
 			// this.logger.log("Drag offset X = " + this.dragOffsetX + " y = " + this.dragOffsetY);
-
-			console.log("this.dragOffsetX " + this.dragOffsetX + " this.dragOffsetY " + this.dragOffsetY);
 			if (this.isDisplayingSubFlowInPlace() &&
 					(this.dragOffsetX > 1000 || this.dragOffsetX < -1000 ||
 						this.dragOffsetY > 1000 || this.dragOffsetY < -1000)) {
