@@ -296,12 +296,11 @@ class CommonCanvasTextToolbar extends React.Component {
 
 		if (this.props.isOpen) {
 			textToolbar = (
-				<aside
+				<div
 					className={"text-toolbar floating-toolbar"}
 					style={{ left: this.props.pos_x, top: this.props.pos_y }}
 					onBlur={this.props.blurHandler}
 					onKeyDown={this.onKeyDown}
-					aria-label={this.getLabel("toolbar.textToolbarContainer")}
 				>
 					<Toolbar
 						config={this.getTextToolbarConfig()}
@@ -315,7 +314,7 @@ class CommonCanvasTextToolbar extends React.Component {
 							ariaLabel: this.getLabel("toolbar.textToolbarLabel")
 						}}
 					/>
-				</aside>
+				</div>
 			);
 		}
 

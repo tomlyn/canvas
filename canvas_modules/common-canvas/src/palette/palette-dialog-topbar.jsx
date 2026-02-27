@@ -68,11 +68,10 @@ class PaletteDialogTopbar extends React.Component {
 
 
 		return (
-			<aside
+			<div
 				className="palette-dialog-topbar"
 				onMouseDown={this.mouseDown}
 				onDoubleClick={this.doubleClick}
-				aria-label={this.props.canvasController.labelUtil?.getLabel("toolbar.paletteDialogToolbarContainer")}
 			>
 				<Toolbar
 					instanceId = {0}
@@ -83,7 +82,7 @@ class PaletteDialogTopbar extends React.Component {
 						ariaLabel: this.props.canvasController.labelUtil?.getLabel("toolbar.paletteDialogToolbarLabel")
 					}}
 				/>
-			</aside>
+			</div>
 		);
 	}
 }
