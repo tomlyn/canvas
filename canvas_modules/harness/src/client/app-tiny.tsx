@@ -16,7 +16,6 @@
 
 import React, { useMemo } from "react";
 import { IntlProvider } from "react-intl";
-// Note use "@elyra/canvas" instead of "common-canvas" here, if you are importing from the NPM module.
 import { CommonCanvas, CanvasController } from "common-canvas"; // eslint-disable-line import/no-unresolved
 import { Theme } from "@carbon/react";
 

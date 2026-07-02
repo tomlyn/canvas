@@ -17,9 +17,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { CommonCanvas, CanvasController,
-	LINK_SELECTION_LINK_ONLY, PALETTE_LAYOUT_NONE,
-	STATE_TAG_NONE, STATE_TAG_LOCKED, STATE_TAG_READ_ONLY } from "common-canvas"; // eslint-disable-line import/no-unresolved
+import { CommonCanvas, CanvasController } from "common-canvas"; // eslint-disable-line import/no-unresolved
+import { LINK_SELECTION_LINK_ONLY, PALETTE_LAYOUT_NONE,
+	STATE_TAG_NONE, STATE_TAG_LOCKED, STATE_TAG_READ_ONLY }
+	from "@elyra/canvas/src/common-canvas/constants/canvas-constants.js";
 import ReadOnlyFlow from "./read-only-flow.json";
 import ReadOnlyPalette from "./read-only-palette.json";
 
