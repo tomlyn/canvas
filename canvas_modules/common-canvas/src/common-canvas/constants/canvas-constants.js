@@ -138,7 +138,7 @@ export const ASSOC_VAR_CURVE_LEFT = "curveLeft";
 export const ASSOC_VAR_DOUBLE_BACK_RIGHT = "doubleBackRight";
 export const ASSOC_VAR_DOUBLE_BACK_LEFT = "doubleBackLeft";
 
-// The type of object to which decorations are to be attached.
+// Object type names
 export const OBJ_NODE = "node";
 export const OBJ_LINK = "link";
 export const OBJ_COMMENT = "comment";
