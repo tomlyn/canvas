@@ -29,7 +29,8 @@ import { ASSOCIATION_LINK, COMMENT_LINK, NODE_LINK,
 	FLOW_IN, FLOW_OUT,
 	PORT_DISPLAY_CIRCLE,
 	LINK_METHOD_PORTS,
-	SINGLE_CLICK, OBJ_COMMENT
+	SINGLE_CLICK,
+	OBJ_COMMENT
 } from "./constants/canvas-constants.js";
 
 // This utility files provides a drag handler which manages drag operations to
