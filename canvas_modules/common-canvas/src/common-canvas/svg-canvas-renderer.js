@@ -2904,7 +2904,7 @@ export default class SVGCanvasRenderer {
 	}
 
 	// Displays the edit icon for an editable decoration label.
-	// obj can be either OBJ_NODE, OBJ_COMMENT or OBJ_LINK.
+	// objType can be either OBJ_NODE, OBJ_COMMENT or OBJ_LINK.
 	displayDecLabelEditIcon(spanObj, dec, obj, objType) {
 		const labelObj = spanObj.parentElement;
 		const foreignObj = labelObj.parentElement;
