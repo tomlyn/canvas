@@ -3032,7 +3032,7 @@ export default class SVGCanvasRenderer {
 
 	// Displays a set of decorations on either a node or link object.
 	// d       - This is a node or link object.
-	// objType - A string set to either OBJ_NODE or OBJ_LINK.
+	// objType - A string set to either OBJ_NODE, OBJ_COMMENT or OBJ_LINK.
 	// trgGrp  - A D3 selection object that references the node or link to
 	//           which the decorations are to be attached.
 	// decs    - An array of decorations to be applied to the node or link.
