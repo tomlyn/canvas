@@ -17,7 +17,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { CommonCanvas, CanvasController } from "common-canvas"; // eslint-disable-line import/no-unresolved
+import { CommonCanvas, CanvasController, OBJ_NODE } from "common-canvas"; // eslint-disable-line import/no-unresolved
 
 import FlowsFlow from "./flows-flow.json";
 import FlowsPalette from "./flows-palette.json";
@@ -111,7 +111,7 @@ export default class FlowsCanvas extends React.Component {
 
 	clickActionHandler(source) {
 		if (this.propertiesRef.current &&
-				source.objectType === "node" &&
+				source.objectType === OBJ_NODE &&
 				source.clickType === "DOUBLE_CLICK") {
 			this.propertiesRef.current.editNodeHandler(source.id, source.pipelineId);
 		}

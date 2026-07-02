@@ -17,7 +17,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { CommonCanvas, CanvasController } from "common-canvas"; // eslint-disable-line import/no-unresolved
+import { CommonCanvas, CanvasController, OBJ_COMMENT } from "common-canvas"; // eslint-disable-line import/no-unresolved
 import { CharacterSentenceCase, CharacterWholeNumber } from "@carbon/react/icons";
 
 import StreamsFlow from "./streams-flow.json";
@@ -76,7 +76,7 @@ export default class StreamsCanvas extends React.Component {
 
 	contextMenuHandler(source, defaultMenu) {
 		const defMenu = defaultMenu;
-		if (source.type === "comment") {
+		if (source.type === OBJ_COMMENT) {
 			const lettersSubMenu = [
 				{ action: "A", label: "Aaaaaaaa" },
 				{ action: "B", label: "Bbbb" },

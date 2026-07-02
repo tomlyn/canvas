@@ -18,3 +18,4 @@ import { CommonCanvas, CanvasController, CommonProperties, CommandStack, Action,
 	from "../../common-canvas/src/index";
 
 export { CommonCanvas, CanvasController, CommonProperties, CommandStack, Action, FlowValidation, ColorPicker, Palette, FlexibleTable, Toolbar };
+export * from "../../common-canvas/src/common-canvas/constants/canvas-constants";
