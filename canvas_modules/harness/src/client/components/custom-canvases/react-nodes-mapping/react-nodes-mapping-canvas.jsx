@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 
 import { Add, Edit } from "@carbon/react/icons";
 
-import { CommonCanvas, CanvasController, OBJ_NODE } from "common-canvas"; // eslint-disable-line import/no-unresolved
+import { CommonCanvas, CanvasController } from "common-canvas"; // eslint-disable-line import/no-unresolved
 
 import MappingContainerNode from "./mapping-container-node.jsx";
 
@@ -96,7 +96,7 @@ export default class ReactNodesMappingCanvas extends React.Component {
 	}
 
 	contextMenuHandler(source, defaultMenu) {
-		if (source.type === OBJ_NODE) {
+		if (source.type === "node") {
 			return [
 				{ action: "add", label: "Add", icon: (<Add size={32} />), enable: true, toolbarItem: true },
 				{ action: "edit", label: "Edit", icon: (<Edit size={32} />), enable: true, toolbarItem: true },

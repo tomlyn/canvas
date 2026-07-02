@@ -21,7 +21,7 @@ import { get } from "lodash";
 
 import { Edit } from "@carbon/react/icons";
 
-import { CommonCanvas, CanvasController, OBJ_LINK } from "common-canvas"; // eslint-disable-line import/no-unresolved
+import { CommonCanvas, CanvasController } from "common-canvas"; // eslint-disable-line import/no-unresolved
 
 import StagesCardNodeFlow from "./stages-card-node-flow.json";
 import StagesCardNodePalette from "../../../../../test_resources/palettes/stagesPalette.json";
@@ -231,7 +231,7 @@ export default class DetachedCanvas extends React.Component {
 	contextMenuHandler(source, defaultMenu) {
 		const newMenu = defaultMenu;
 
-		if (source.type === OBJ_LINK) {
+		if (source.type === "link") {
 			newMenu.unshift(
 				{ action: "renameLinkLabel", label: "Rename", icon: (<Edit />) }
 			);

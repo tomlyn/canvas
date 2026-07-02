@@ -17,7 +17,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { CommonCanvas, CanvasController, OBJ_LINK } from "common-canvas"; // eslint-disable-line import/no-unresolved
+import { CommonCanvas, CanvasController } from "common-canvas"; // eslint-disable-line import/no-unresolved
 import { ColorPalette } from "@carbon/react/icons";
 
 import LogicFlow from "./logic-flow.json";
@@ -117,7 +117,7 @@ export default class LogicCanvas extends React.Component {
 	}
 
 	contextMenuHandler(source, defaultMenu) {
-		if (source.type === OBJ_LINK) {
+		if (source.type === "link") {
 			const subMenuColorLink = [
 				{ action: "default-color", label: "Default Color", enable: true },
 				{ action: "red-color", label: "Red", enable: true },

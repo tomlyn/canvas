@@ -115,7 +115,7 @@ import {
 	DISPLAY_GRID_BOXES_AND_LINES,
 	LAYOUT_LIBRARY_ELK,
 	LAYOUT_LIBRARY_DAGRE
-} from "common-canvas"; // eslint-disable-line import/no-unresolved
+} from "../../../../../common-canvas/src/common-canvas/constants/canvas-constants";
 
 import FormsService from "../../../services/FormsService";
 

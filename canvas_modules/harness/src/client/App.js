@@ -166,9 +166,8 @@ import {
 	UNDERLAY_NONE,
 	PALETTE_LAYOUT_FLYOUT,
 	TOOLBAR_LAYOUT_TOP,
-	LAYOUT_LIBRARY_DAGRE,
-	OBJ_NODE, OBJ_CANVAS, OBJ_INPUT_PORT, OBJ_OUTPUT_PORT
-} from "common-canvas"; // eslint-disable-line import/no-unresolved
+	LAYOUT_LIBRARY_DAGRE
+} from "../../../common-canvas/src/common-canvas/constants/canvas-constants";
 
 import EXTERNAL_SUB_FLOW_CANVAS_1 from "../../test_resources/diagrams/externalSubFlowCanvas1.json";
 import EXTERNAL_SUB_FLOW_CANVAS_2 from "../../test_resources/diagrams/externalSubFlowCanvas2.json";
@@ -1459,7 +1458,7 @@ class App extends React.Component {
 		// or logging in the test harness should be refactored to not cause the
 		// canvas to refresh.
 		// this.log("clickActionHandler()", source);
-		if (source.objectType === OBJ_NODE &&
+		if (source.objectType === "node" &&
 			((this.state.selectedDragWithoutSelect &&
 				source.clickType === "SINGLE_CLICK" &&
 				this.canvasController.getSelectedObjectIds().length === 1) ||
@@ -1477,7 +1476,7 @@ class App extends React.Component {
 		// or logging in the test harness should be refactored to not cause the
 		// canvas to refresh.
 		// this.log("extraCanvasClickActionHandler()", source);
-		if (source.objectType === OBJ_NODE &&
+		if (source.objectType === "node" &&
 			((this.state.selectedDragWithoutSelect &&
 				source.clickType === "SINGLE_CLICK" &&
 				this.canvasController2.getSelectedObjectIds().length === 1) ||
@@ -1661,7 +1660,7 @@ class App extends React.Component {
 	contextMenuHandler(source, defaultMenu) {
 		let defMenu = defaultMenu;
 		// Add custom menu items at proper positions: open, preview & execute
-		if (source.type === OBJ_NODE &&
+		if (source.type === "node" &&
 				(source.selectedObjectIds.length === 1 ||
 					this.canvasController.isContextToolbarForNonSelectedObj(source))) {
 			defMenu.unshift({ action: "editNode", label: this.getLabel("node_editNode", "CMI: Open") });
@@ -1670,14 +1669,14 @@ class App extends React.Component {
 			defMenu.splice(9, 0, { divider: true });
 		}
 		// Add custom menu items validate flow and stream properties if source is canvas
-		if (source.type === OBJ_CANVAS) {
+		if (source.type === "canvas") {
 			defMenu = defMenu.concat([{ action: "streamProperties", label: this.getLabel("canvas_streamProperties", "CMI: Options") }]);
 
-		} else if (source.type === OBJ_INPUT_PORT) {
+		} else if (source.type === "input_port") {
 			const portName = source.port.label ? source.port.label : source.port.id;
 			defMenu = defMenu.concat({ action: "inputPortAction", label: this.getLabel("canvas_inputPortAction", "CMI: Input Port action for '" + portName + "'") });
 
-		} else if (source.type === OBJ_OUTPUT_PORT) {
+		} else if (source.type === "output_port") {
 			const portName = source.port.label ? source.port.label : source.port.id;
 			defMenu = defMenu.concat({ action: "outputPortAction", label: this.getLabel("canvas_outputPortAction", "CMI: Output Port action for '" + portName + "'") });
 		}

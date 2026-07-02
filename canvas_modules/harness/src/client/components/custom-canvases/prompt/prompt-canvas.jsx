@@ -17,7 +17,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { CommonCanvas, CanvasController, OBJ_NODE } from "common-canvas"; // eslint-disable-line import/no-unresolved
+import { CommonCanvas, CanvasController } from "common-canvas"; // eslint-disable-line import/no-unresolved
 import { Menu } from "@carbon/react/icons";
 import Flow from "./prompt-flow.json";
 import Palette from "./prompt-palette.json";
@@ -132,7 +132,7 @@ export default class PromptCanvas extends React.Component {
 	}
 
 	contextMenuHandler(source, defaultMenu) {
-		if (source.type === OBJ_NODE) {
+		if (source.type === "node") {
 			if (source.targetObject.op === "prompt_node") {
 				return [];
 			}

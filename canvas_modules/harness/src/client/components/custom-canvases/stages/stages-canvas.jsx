@@ -18,7 +18,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { CommonCanvas, CanvasController, Palette, OBJ_NODE, OBJ_LINK } from "common-canvas"; // eslint-disable-line import/no-unresolved
+import { CommonCanvas, CanvasController, Palette } from "common-canvas"; // eslint-disable-line import/no-unresolved
 
 import { Button } from "@carbon/react";
 import { Edit, OpenPanelFilledLeft, Search } from "@carbon/react/icons";
@@ -274,7 +274,7 @@ export default class StagesCanvas extends React.Component {
 
 	contextMenuHandler(source, defaultMenu) {
 		const newMenu = defaultMenu;
-		if (source.type === OBJ_LINK) {
+		if (source.type === "link") {
 			newMenu.unshift(
 				{ action: "renameLinkLabel", label: "Rename", icon: (<Edit />) }
 			);
@@ -284,7 +284,7 @@ export default class StagesCanvas extends React.Component {
 	}
 
 	clickActionHandler(source) {
-		if (source.objectType === OBJ_NODE &&
+		if (source.objectType === "node" &&
 				source.clickType === "DOUBLE_CLICK") {
 			const node = this.canvasController.getNode(source.id, source.pipelineId);
 
