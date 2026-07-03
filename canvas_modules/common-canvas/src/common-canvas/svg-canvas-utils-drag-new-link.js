@@ -30,7 +30,9 @@ import { ASSOCIATION_LINK, COMMENT_LINK, NODE_LINK,
 	PORT_DISPLAY_CIRCLE,
 	LINK_METHOD_PORTS,
 	SINGLE_CLICK,
-	OBJ_COMMENT
+	OBJ_COMMENT,
+	ACTION_LINK_NODES, ACTION_LINK_NODES_AND_REPLACE, ACTION_LINK_COMMENT,
+	ACTION_CREATE_DETACHED_LINK, ACTION_BEGIN_NEW_LINK
 } from "./constants/canvas-constants.js";
 
 // This utility files provides a drag handler which manages drag operations to
@@ -457,7 +459,7 @@ export default class SVGCanvasUtilsDragNewLink {
 		if (CanvasUtils.isDataConnectionAllowed(srcPortId, trgPortId, srcNode, trgNode,
 			this.ren.activePipeline.links, this.ren.config.enableSelfRefLinks)) {
 			this.ren.canvasController.editActionHandler({
-				editType: "linkNodes",
+				editType: ACTION_LINK_NODES,
 				editSource: "canvas",
 				nodes: [{ "id": srcNode.id, "portId": srcPortId }],
 				targetNodes: [{ "id": trgNode.id, "portId": trgPortId }],
@@ -476,7 +478,7 @@ export default class SVGCanvasUtilsDragNewLink {
 			// is only one link. i.e. the input port cardinality is 0:1
 			if (linksToTrgPort.length === 1) {
 				this.ren.canvasController.editActionHandler({
-					editType: "linkNodesAndReplace",
+					editType: ACTION_LINK_NODES_AND_REPLACE,
 					editSource: "canvas",
 					nodes: [{ "id": srcNode.id, "portId": srcPortId }],
 					targetNodes: [{ "id": trgNode.id, "portId": trgPortId }],
@@ -494,7 +496,7 @@ export default class SVGCanvasUtilsDragNewLink {
 	createNewAssocLink(srcNode, trgNode) {
 		if (CanvasUtils.isAssocConnectionAllowed(srcNode, trgNode, this.ren.activePipeline.links)) {
 			this.ren.canvasController.editActionHandler({
-				editType: "linkNodes",
+				editType: ACTION_LINK_NODES,
 				editSource: "canvas",
 				nodes: [{ "id": srcNode.id }],
 				targetNodes: [{ "id": trgNode.id }],
@@ -506,7 +508,7 @@ export default class SVGCanvasUtilsDragNewLink {
 	createNewCommentLink(srcObj, trgNode) {
 		if (CanvasUtils.isCommentLinkConnectionAllowed(srcObj.id, trgNode.id, this.ren.activePipeline.links)) {
 			this.ren.canvasController.editActionHandler({
-				editType: "linkComment",
+				editType: ACTION_LINK_COMMENT,
 				editSource: "canvas",
 				nodes: [srcObj.id],
 				targetNodes: [trgNode.id],
@@ -530,7 +532,7 @@ export default class SVGCanvasUtilsDragNewLink {
 
 		const endPoint = this.ren.getTransformedMousePos(d3Event);
 		this.ren.canvasController.editActionHandler({
-			editType: "createDetachedLink",
+			editType: ACTION_CREATE_DETACHED_LINK,
 			editSource: "canvas",
 			srcNodeId: drawingNewLinkData.srcObj.id,
 			srcNodePortId: drawingNewLinkData.srcPort.id,
@@ -678,7 +680,7 @@ export default class SVGCanvasUtilsDragNewLink {
 	// created, to give the app the chance to prepare.
 	beginNewLinkCallback(port, node) {
 		this.ren.canvasController.editActionHandler({
-			editType: "beginNewLink",
+			editType: ACTION_BEGIN_NEW_LINK,
 			editSource: "canvas",
 			node: node,
 			port: port
