@@ -32,8 +32,7 @@ import { ASSOCIATION_LINK, COMMENT_LINK, NODE_LINK,
 	SINGLE_CLICK,
 	OBJ_COMMENT,
 	ACTION_LINK_NODES, ACTION_LINK_NODES_AND_REPLACE, ACTION_LINK_COMMENT,
-	ACTION_CREATE_DETACHED_LINK, ACTION_BEGIN_NEW_LINK
-} from "./constants/canvas-constants.js";
+	ACTION_CREATE_DETACHED_LINK, ACTION_BEGIN_NEW_LINK } from "./constants/canvas-constants.js";
 
 // This utility files provides a drag handler which manages drag operations to
 // create new links either between nodes or from a comment to a node.

@@ -28,8 +28,7 @@ import { SNAP_TO_GRID_AFTER, SNAP_TO_GRID_DURING, LINK_SELECTION_DETACHABLE,
 	SINGLE_CLICK,
 	OBJ_NODE,
 	ACTION_INSERT_NODE_INTO_LINK, ACTION_ATTACH_NODE_TO_LINKS, ACTION_MOVE_OBJECTS,
-	ACTION_RESIZE_OBJECTS }
-	from "./constants/canvas-constants.js";
+	ACTION_RESIZE_OBJECTS } from "./constants/canvas-constants.js";
 
 // This utility files provides a drag handler which manages drag operations to move
 // and resize nodes and comments. Also, it provides utility functions to handle
