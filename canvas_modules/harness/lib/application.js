@@ -62,8 +62,8 @@ function create(callback) {
 			[
 				"default-src 'self'",
 				"script-src 'self' 'unsafe-inline'",
-				"style-src 'self' 'unsafe-inline'",
-				// "style-src 'self'",
+				// "style-src 'self' 'unsafe-inline'",
+				"style-src 'self'",
 				"font-src 'self' data:",
 				"img-src 'self' data:",
 				"connect-src 'self'",
