@@ -530,6 +530,7 @@ class VirtualizedTable extends React.Component {
 											disableSort={typeof this.props.sortColumns[column.key] === "undefined"}
 											cellRenderer={column.isHTML ? this.cellRendererHTML : this.cellRenderer}
 											headerRenderer={this.headerColRenderer}
+											style={null}
 											{...column.minWidth && { minWidth: column.minWidth }}
 										/>
 									))
