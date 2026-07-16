@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2025 Elyra Authors
+ * Copyright 2017-2026 Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,16 +64,35 @@ function create(callback) {
 			[
 				"default-src 'self'",
 				"script-src 'self' 'unsafe-inline'",
-				// "style-src 'self' 'unsafe-inline'",
 				"style-src 'self'",
 				"font-src 'self' data:",
 				"img-src 'self' data:",
 				"connect-src 'self'",
-				"worker-src blob:"
+				"worker-src blob:",
+				"report-uri /csp-report"
 			].join("; ")
 		);
 		next();
 	});
+
+	// CSP violation report endpoint — browsers POST here when the above policy
+	// is violated. Each report is printed to the server console as a warning so
+	// violations are visible without opening browser DevTools.
+	app.post("/csp-report",
+		bodyParser.json({ type: "application/csp-report", limit: "50kb" }),
+		(req, res) => {
+			const report = req.body && req.body["csp-report"];
+			if (report) {
+				logger.warn(
+					`CSP violation: blocked-uri="${report["blocked-uri"]}" ` +
+					`violated-directive="${report["violated-directive"]}" ` +
+					`source-file="${report["source-file"]}" ` +
+					`line=${report["line-number"]} col=${report["column-number"]}`
+				);
+			}
+			res.status(204).end();
+		}
+	);
 
 	app.use(session({
 		secret: APP_SESSION_KEY,
