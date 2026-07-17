@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../assets/FlowIcon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -4167,6 +4167,14 @@ Note:</p>
 <span class="nx">setObjectsMultiStyle</span><span class="p">(</span><span class="nx">pipelineObjStyles</span><span class="p">,</span><span class="w"> </span><span class="nx">temporary</span><span class="p">)</span>
 </code></pre></div></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Content Security Policy</p>
+<p>The <code>style</code> specification passed to <code>setObjectsStyle</code> and <code>setObjectsMultiStyle</code> is
+rendered as an inline <code>style</code> attribute directly on the SVG node and comment elements.
+Applications that use these methods must include <code>'unsafe-inline'</code> in their
+<code>Content-Security-Policy</code> <code>style-src</code> directive. Applications that do not use these
+methods can omit <code>'unsafe-inline'</code> from <code>style-src</code>.</p>
+</div>
 <h2 id="node-methods">Node methods<a class="headerlink" href="#node-methods" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1">// Returns an array of nodes for the pipeline specified by the pipelineId.</span>
 <span class="nx">getNodes</span><span class="p">(</span><span class="nx">pipelineId</span><span class="p">)</span>
@@ -4646,8 +4654,16 @@ Note:</p>
 <span class="c1">// temporary - A boolean to indicate if the styles are serialized when</span>
 <span class="c1">//             getPipelineFlow() method is called or not.</span>
 <span class="nx">setLinksMultiStyle</span><span class="p">(</span><span class="nx">pipelineObjStyles</span><span class="p">,</span><span class="w"> </span><span class="nx">temporary</span><span class="p">)</span>
-
-<span class="c1">// Gets the class name associated with the link specified by linkId in the</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Content Security Policy</p>
+<p>The <code>style</code> specification passed to <code>setLinksStyle</code> and <code>setLinksMultiStyle</code> is
+rendered as an inline <code>style</code> attribute directly on the SVG link elements.
+Applications that use these methods must include <code>'unsafe-inline'</code> in their
+<code>Content-Security-Policy</code> <code>style-src</code> directive. Applications that do not use these
+methods can omit <code>'unsafe-inline'</code> from <code>style-src</code>.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="c1">// Gets the class name associated with the link specified by linkId in the</span>
 <span class="c1">// pipeline specified by pipelineId.</span>
 <span class="nx">getLinkClassName</span><span class="p">(</span><span class="nx">linkId</span><span class="p">,</span><span class="w"> </span><span class="nx">pipelineId</span><span class="p">)</span>
 
@@ -5057,7 +5073,7 @@ Note:</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.action.edit", "navigation.tabs", "navigation.indexes", "navigation.footer"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="../js/links-in-new-tabs.js"></script>
       
