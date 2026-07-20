@@ -585,7 +585,7 @@ class ExpressionControl extends React.Component {
 						<div
 							className={codemirrorClassName}
 							ref={this.editorRef}
-							style={{ "--expression-editor-height": this.state.expressionEditorHeight, "--expression-editor-min-height": minLineHeight }}
+							style={{ "--expression-editor-height": this.state.expressionEditorHeight + "px", "--expression-editor-min-height": minLineHeight + "px" }}
 							aria-disabled={this.props.state === STATES.DISABLED || this.props.readOnly}
 						/>
 						<ValidationMessage state={this.props.state} messageInfo={messageInfo} inTable={this.props.tableControl} />
