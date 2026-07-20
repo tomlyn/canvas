@@ -376,7 +376,7 @@ const VirtualizedGrid = (props) => {
 							{ "properties-vt-column-sortable": sortable },
 							{ "sort-column-active": sortable && (virtualHeader.column.getIsSorted() === "asc" || virtualHeader.column.getIsSorted() === "desc") }
 						)}
-						style={{ "--vg-col-width": Math.max(colSizes[virtualColumn.index], header.width) }}
+						style={{ "--vg-col-width": Math.max(colSizes[virtualColumn.index], header.width) + "px" }}
 						onClick={virtualHeader.column.getToggleSortingHandler()}
 						aria-label={headerLabel}
 						data-id={`properties-vt-header-${header.key}`}
@@ -411,8 +411,8 @@ const VirtualizedGrid = (props) => {
 					return (<td key={`properties-grid-row-${virtualRow.index}-${virtualColumn.index}`}
 						className={classNames("properties-grid-body-row-cell")}
 						style={{
-							"--vg-col-min-height": DEFAULT_ROW_HEIGHT,
-							"--vg-col-width": Math.max(colSizes[virtualColumn.index], props.columns[virtualColumn.index].width)
+							"--vg-col-min-height": DEFAULT_ROW_HEIGHT + "px",
+							"--vg-col-width": Math.max(colSizes[virtualColumn.index], props.columns[virtualColumn.index].width) + "px"
 						}}
 					>
 						{cell.getValue()}
