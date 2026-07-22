@@ -3337,7 +3337,6 @@ class App extends React.Component {
 			{ "console-panel-open": this.state.consoleOpened }
 		);
 
-		const tooltipFontSize = "13px";
 		const mainView = (<div id="harness-app-container">
 			{navBar}
 			{sidePanel}
