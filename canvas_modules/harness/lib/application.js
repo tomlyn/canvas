@@ -59,6 +59,7 @@ function create(callback) {
 	// script-src retains 'unsafe-inline' because the HMR dev toolchain injects
 	// inline scripts; that is unrelated to the hardening work.
 	app.use((_req, res, next) => {
+		res.setHeader("Reporting-Endpoints", "csp-endpoint=\"/csp-report\"");
 		res.setHeader(
 			"Content-Security-Policy",
 			[
@@ -69,7 +70,8 @@ function create(callback) {
 				"img-src 'self' data:",
 				"connect-src 'self'",
 				"worker-src blob:",
-				"report-uri /csp-report"
+				"report-uri /csp-report",
+				"report-to csp-endpoint"
 			].join("; ")
 		);
 		next();
@@ -79,17 +81,22 @@ function create(callback) {
 	// is violated. Each report is printed to the server console as a warning so
 	// violations are visible without opening browser DevTools.
 	app.post("/csp-report",
-		bodyParser.json({ type: "application/csp-report", limit: "50kb" }),
+		bodyParser.json({ type: ["application/csp-report", "application/reports+json"], limit: "50kb" }),
 		(req, res) => {
-			const report = req.body && req.body["csp-report"];
-			if (report) {
-				logger.warn(
-					`CSP violation: blocked-uri="${report["blocked-uri"]}" ` +
-					`violated-directive="${report["violated-directive"]}" ` +
-					`source-file="${report["source-file"]}" ` +
-					`line=${report["line-number"]} col=${report["column-number"]}`
-				);
-			}
+			// report-to sends an array; report-uri sends a single object
+			const reports = Array.isArray(req.body) ? req.body : [req.body];
+			reports.forEach((item) => {
+				const report = item["csp-report"] || item.body;
+				if (report) {
+					logger.warn(
+						`CSP violation: blocked-uri="${report["blocked-uri"] || report.blockedURL}" ` +
+						`violated-directive="${report["violated-directive"] || report.effectiveDirective}" ` +
+						`source-file="${report["source-file"] || report.sourceFile}" ` +
+						`line=${report["line-number"] || report.lineNumber} ` +
+						`col=${report["column-number"] || report.columnNumber}`
+					);
+				}
+			});
 			res.status(204).end();
 		}
 	);
