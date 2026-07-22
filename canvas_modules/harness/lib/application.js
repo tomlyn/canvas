@@ -53,11 +53,14 @@ function create(callback) {
 	app.use(compression());
 
 	// Content Security Policy.
-	// style-src 'self' — no 'unsafe-inline' — to surface any remaining inline
-	// style violations. Violations are POSTed to /csp-report and logged to the
-	// server console so you can see them without opening browser DevTools.
+	// style-src includes 'unsafe-inline' because CodeMirror 6 (used by the
+	// expression editor) injects CSS rules via StyleModule/style-mod which
+	// creates <style> tags at runtime — a technique that requires 'unsafe-inline'.
+	// All canvas and common-properties inline style= attributes have been
+	// removed; this 'unsafe-inline' is solely for CodeMirror's style injection.
 	// script-src retains 'unsafe-inline' because the HMR dev toolchain injects
 	// inline scripts; that is unrelated to the hardening work.
+	// Remaining violations are logged via /csp-report for ongoing review.
 	app.use((_req, res, next) => {
 		res.setHeader("Reporting-Endpoints", "csp-endpoint=\"/csp-report\"");
 		res.setHeader(
@@ -65,7 +68,7 @@ function create(callback) {
 			[
 				"default-src 'self'",
 				"script-src 'self' 'unsafe-inline'",
-				"style-src 'self'",
+				"style-src 'self' 'unsafe-inline'",
 				"font-src 'self' data:",
 				"img-src 'self' data:",
 				"connect-src 'self'",
