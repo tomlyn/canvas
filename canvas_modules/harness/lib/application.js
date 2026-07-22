@@ -81,12 +81,6 @@ function create(callback) {
 		next();
 	});
 
-	// Nonce endpoint — the client fetches this once on mount to obtain the
-	// current request's nonce value and pass it to CommonProperties.
-	app.get("/nonce", (_req, res) => {
-		res.json({ nonce: res.locals.cspNonce });
-	});
-
 	// CSP violation report endpoint — browsers POST here when the above policy
 	// is violated. Each report is printed to the server console as a warning so
 	// violations are visible without opening browser DevTools.
@@ -123,6 +117,24 @@ function create(callback) {
 		logger.info("In development mode; using webpack with HMR");
 		_configureHmr(app);
 	}
+
+	// Inject the CSP nonce into every HTML response as a global JS variable.
+	// This must be registered before any middleware that sends HTML (webpack-dev-
+	// middleware in dev, express.static in production) so that res.send is already
+	// patched when those middlewares write the response.
+	// script-src retains 'unsafe-inline' so this inline <script> is permitted.
+	app.use((_req, res, next) => {
+		const nonce = res.locals.cspNonce;
+		const origSend = res.send.bind(res);
+		res.send = (rawBody) => {
+			const contentType = res.getHeader("Content-Type") || "";
+			const body = (typeof rawBody === "string" && contentType.includes("text/html"))
+				? rawBody.replace("</body>", `<script>window.__CSP_NONCE__="${nonce}"</script></body>`)
+				: rawBody;
+			return origSend(body);
+		};
+		next();
+	});
 
 	app.use(express.static(path.join(__dirname, "../.build")));
 
