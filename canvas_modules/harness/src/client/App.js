@@ -382,6 +382,7 @@ class App extends React.Component {
 			enableResize: true,
 			iconSwitch: false,
 			enableTanstackTable: true,
+			cspNonce: null,
 			initialEditorSize: "small",
 			conditionHiddenPropertyHandling: "null",
 			conditionDisabledPropertyHandling: "null",
@@ -626,6 +627,9 @@ class App extends React.Component {
 			.then(function(res) {
 				that.availableParamDefs = res;
 			});
+		fetch("/nonce")
+			.then((res) => res.json())
+			.then((data) => that.setState({ cspNonce: data.nonce }));
 	}
 
 	// Sets the state to the config passed in by adding whatever is
@@ -2333,7 +2337,8 @@ class App extends React.Component {
 			showCharacterCounter: this.state.showCharacterCounter,
 			locale: this.locale,
 			iconSwitch: this.state.iconSwitch,
-			enableTanstackTable: this.state.enableTanstackTable
+			enableTanstackTable: this.state.enableTanstackTable,
+			cspNonce: this.state.cspNonce
 		};
 	}
 

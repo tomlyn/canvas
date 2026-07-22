@@ -53,22 +53,23 @@ function create(callback) {
 	app.use(compression());
 
 	// Content Security Policy.
-	// style-src includes 'unsafe-inline' because CodeMirror 6 (used by the
-	// expression editor) injects CSS rules via StyleModule/style-mod which
-	// creates <style> tags at runtime — a technique that requires 'unsafe-inline'.
-	// All canvas and common-properties inline style= attributes have been
-	// removed; this 'unsafe-inline' is solely for CodeMirror's style injection.
+	// A fresh nonce is generated per request and placed in res.locals.cspNonce.
+	// The nonce is used in style-src so CodeMirror 6 (style-mod/StyleModule) can
+	// inject its <style> tags without requiring 'unsafe-inline'. The harness
+	// exposes the nonce to the client via GET /nonce so App.js can pass it to
+	// <CommonProperties propertiesConfig={{ cspNonce }}>.
 	// script-src retains 'unsafe-inline' because the HMR dev toolchain injects
 	// inline scripts; that is unrelated to the hardening work.
 	// Remaining violations are logged via /csp-report for ongoing review.
 	app.use((_req, res, next) => {
+		res.locals.cspNonce = crypto.randomBytes(16).toString("base64");
 		res.setHeader("Reporting-Endpoints", "csp-endpoint=\"/csp-report\"");
 		res.setHeader(
 			"Content-Security-Policy",
 			[
 				"default-src 'self'",
 				"script-src 'self' 'unsafe-inline'",
-				"style-src 'self' 'unsafe-inline'",
+				`style-src 'self' 'nonce-${res.locals.cspNonce}'`,
 				"font-src 'self' data:",
 				"img-src 'self' data:",
 				"connect-src 'self'",
@@ -78,6 +79,12 @@ function create(callback) {
 			].join("; ")
 		);
 		next();
+	});
+
+	// Nonce endpoint — the client fetches this once on mount to obtain the
+	// current request's nonce value and pass it to CommonProperties.
+	app.get("/nonce", (_req, res) => {
+		res.json({ nonce: res.locals.cspNonce });
 	});
 
 	// CSP violation report endpoint — browsers POST here when the above policy
