@@ -3350,7 +3350,7 @@ class App extends React.Component {
 				{commonCanvas}
 			</main>
 			{consoleView}
-			<ReactTooltip id="toolbar-tooltip" place="bottom" effect="solid" style={{ fontSize: tooltipFontSize }} />
+			<ReactTooltip id="toolbar-tooltip" place="bottom" style={{ fontSize: tooltipFontSize }} />
 		</div>);
 
 		return (
