@@ -17,7 +17,6 @@
 // ESLint Rule Overrides
 
 /* eslint no-process-exit: 0 */
-import { randomBytes } from "crypto";
 import express from "express";
 import session from "express-session";
 import compression from "compression";
@@ -54,23 +53,24 @@ function create(callback) {
 	app.use(compression());
 
 	// Content Security Policy.
-	// A fresh nonce is generated per request and placed in res.locals.cspNonce.
-	// The nonce is used in style-src so CodeMirror 6 (style-mod/StyleModule) can
-	// inject its <style> tags without requiring 'unsafe-inline'. The harness
-	// exposes the nonce to the client via GET /nonce so App.js can pass it to
-	// <CommonProperties propertiesConfig={{ cspNonce }}>.
-	// script-src retains 'unsafe-inline' because the HMR dev toolchain injects
-	// inline scripts; that is unrelated to the hardening work.
-	// Remaining violations are logged via /csp-report for ongoing review.
+	// style-src retains 'unsafe-inline' for two reasons:
+	//   1. CodeMirror 6 (expression editor) injects CSS via StyleModule/style-mod
+	//      which creates <style> tags at runtime. Applications can eliminate this
+	//      by passing propertiesConfig.cspNonce to <CommonProperties>.
+	//   2. The harness demo components use many React style={{ ... }} props with
+	//      standard CSS properties; the harness cannot be fully hardened.
+	// The cspNonce field in propertiesConfig is the documented path for real
+	// applications that serve their HTML dynamically and can inject a nonce.
+	// script-src retains 'unsafe-inline' for the HMR dev toolchain.
+	// Violations are logged via /csp-report for ongoing review.
 	app.use((_req, res, next) => {
-		res.locals.cspNonce = randomBytes(16).toString("base64");
 		res.setHeader("Reporting-Endpoints", "csp-endpoint=\"/csp-report\"");
 		res.setHeader(
 			"Content-Security-Policy",
 			[
 				"default-src 'self'",
 				"script-src 'self' 'unsafe-inline'",
-				`style-src 'self' 'nonce-${res.locals.cspNonce}'`,
+				"style-src 'self' 'unsafe-inline'",
 				"font-src 'self' data:",
 				"img-src 'self' data:",
 				"connect-src 'self'",
@@ -118,24 +118,6 @@ function create(callback) {
 		logger.info("In development mode; using webpack with HMR");
 		_configureHmr(app);
 	}
-
-	// Inject the CSP nonce into every HTML response as a global JS variable.
-	// This must be registered before any middleware that sends HTML (webpack-dev-
-	// middleware in dev, express.static in production) so that res.send is already
-	// patched when those middlewares write the response.
-	// script-src retains 'unsafe-inline' so this inline <script> is permitted.
-	app.use((_req, res, next) => {
-		const nonce = res.locals.cspNonce;
-		const origSend = res.send.bind(res);
-		res.send = (rawBody) => {
-			const contentType = res.getHeader("Content-Type") || "";
-			const body = (typeof rawBody === "string" && contentType.includes("text/html"))
-				? rawBody.replace("</body>", `<script>window.__CSP_NONCE__="${nonce}"</script></body>`)
-				: rawBody;
-			return origSend(body);
-		};
-		next();
-	});
 
 	app.use(express.static(path.join(__dirname, "../.build")));
 

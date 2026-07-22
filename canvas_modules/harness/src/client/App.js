@@ -2333,8 +2333,7 @@ class App extends React.Component {
 			showCharacterCounter: this.state.showCharacterCounter,
 			locale: this.locale,
 			iconSwitch: this.state.iconSwitch,
-			enableTanstackTable: this.state.enableTanstackTable,
-			cspNonce: window.__CSP_NONCE__
+			enableTanstackTable: this.state.enableTanstackTable
 		};
 	}
 
