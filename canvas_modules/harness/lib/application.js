@@ -17,6 +17,7 @@
 // ESLint Rule Overrides
 
 /* eslint no-process-exit: 0 */
+import { randomBytes } from "crypto";
 import express from "express";
 import session from "express-session";
 import compression from "compression";
@@ -62,7 +63,7 @@ function create(callback) {
 	// inline scripts; that is unrelated to the hardening work.
 	// Remaining violations are logged via /csp-report for ongoing review.
 	app.use((_req, res, next) => {
-		res.locals.cspNonce = crypto.randomBytes(16).toString("base64");
+		res.locals.cspNonce = randomBytes(16).toString("base64");
 		res.setHeader("Reporting-Endpoints", "csp-endpoint=\"/csp-report\"");
 		res.setHeader(
 			"Content-Security-Policy",
