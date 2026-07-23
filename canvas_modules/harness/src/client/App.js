@@ -21,7 +21,6 @@
 
 import React from "react";
 import Isvg from "react-inlinesvg";
-import { Tooltip as ReactTooltip } from "react-tooltip";
 import JavascriptFileDownload from "js-file-download";
 import { FormattedMessage, IntlProvider } from "react-intl";
 import { forIn, get, has, isEmpty, isEqual } from "lodash";
@@ -579,7 +578,7 @@ class App extends React.Component {
 		// Sample palette header object for display below the Search bar and above
 		// the scrollable area for categories and nodes.
 		this.paletteHeader = (
-			<div style={{ borderBottom: "1px solid lightgray", height: "fit-content", padding: "12px 50px 12px" }} >
+			<div className="harness-palette-header">
 				<Button kind="tertiary" onClick={() => window.alert("Test button clicked!")}>
 					Test Button
 				</Button>
@@ -2666,7 +2665,7 @@ class App extends React.Component {
 						action: "custom-loading",
 						tooltip: "A custom loading!",
 						jsx: (tabIndex) => (
-							<div style={{ padding: "4px 11px" }}>
+							<div className="harness-toolbar-jsx-loading">
 								<InlineLoading status="active" description="Loading..."
 									className={"toolbar-jsx-obj"}
 									tabIndex={tabIndex}
@@ -2680,7 +2679,7 @@ class App extends React.Component {
 						action: "custom-checkbox",
 						tooltip: "A custom checkbox!",
 						jsx: (tabIndex) => (
-							<div style={{ padding: "5px 11px" }}>
+							<div className="harness-toolbar-jsx-checkbox">
 								<Checkbox id={"custom-checkbox"} defaultChecked labelText={"Check it out"}
 									onClick={(e) => window.alert("Checkbox clicked!")}
 									className={"toolbar-jsx-obj"}
@@ -3338,7 +3337,6 @@ class App extends React.Component {
 			{ "console-panel-open": this.state.consoleOpened }
 		);
 
-		const tooltipFontSize = "13px";
 		const mainView = (<div id="harness-app-container">
 			{navBar}
 			{sidePanel}
@@ -3350,7 +3348,6 @@ class App extends React.Component {
 				{commonCanvas}
 			</main>
 			{consoleView}
-			<ReactTooltip id="toolbar-tooltip" place="bottom" effect="solid" style={{ fontSize: tooltipFontSize }} />
 		</div>);
 
 		return (
