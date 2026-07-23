@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2025 Elyra Authors
+ * Copyright 2017-2026 Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,60 @@ function create(callback) {
 	// See: http://expressjs.com/en/guide/behind-proxies.html
 	app.set("trust proxy", 1);
 	app.use(compression());
+
+	// Content Security Policy.
+	// style-src retains 'unsafe-inline' for two reasons:
+	//   1. CodeMirror 6 (expression editor) injects CSS via StyleModule/style-mod
+	//      which creates <style> tags at runtime. Applications can eliminate this
+	//      by passing propertiesConfig.cspNonce to <CommonProperties>.
+	//   2. The harness demo components use many React style={{ ... }} props with
+	//      standard CSS properties; the harness cannot be fully hardened.
+	// The cspNonce field in propertiesConfig is the documented path for real
+	// applications that serve their HTML dynamically and can inject a nonce.
+	// script-src retains 'unsafe-inline' for the HMR dev toolchain.
+	// Violations are logged via /csp-report for ongoing review.
+	app.use((_req, res, next) => {
+		res.setHeader("Reporting-Endpoints", "csp-endpoint=\"/csp-report\"");
+		res.setHeader(
+			"Content-Security-Policy",
+			[
+				"default-src 'self'",
+				"script-src 'self' 'unsafe-inline'",
+				"style-src 'self' 'unsafe-inline'",
+				"font-src 'self' data:",
+				"img-src 'self' data:",
+				"connect-src 'self'",
+				"worker-src blob:",
+				"report-uri /csp-report",
+				"report-to csp-endpoint"
+			].join("; ")
+		);
+		next();
+	});
+
+	// CSP violation report endpoint — browsers POST here when the above policy
+	// is violated. Each report is printed to the server console as a warning so
+	// violations are visible without opening browser DevTools.
+	app.post("/csp-report",
+		bodyParser.json({ type: ["application/csp-report", "application/reports+json"], limit: "50kb" }),
+		(req, res) => {
+			// report-to sends an array; report-uri sends a single object
+			const reports = Array.isArray(req.body) ? req.body : [req.body];
+			reports.forEach((item) => {
+				const report = item["csp-report"] || item.body;
+				if (report) {
+					logger.warn(
+						`CSP violation: blocked-uri="${report["blocked-uri"] || report.blockedURL}" ` +
+						`violated-directive="${report["violated-directive"] || report.effectiveDirective}" ` +
+						`source-file="${report["source-file"] || report.sourceFile}" ` +
+						`line=${report["line-number"] || report.lineNumber} ` +
+						`col=${report["column-number"] || report.columnNumber}`
+					);
+				}
+			});
+			res.status(204).end();
+		}
+	);
 
 	app.use(session({
 		secret: APP_SESSION_KEY,
