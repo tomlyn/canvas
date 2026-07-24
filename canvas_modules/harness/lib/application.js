@@ -22,6 +22,8 @@ import session from "express-session";
 import compression from "compression";
 import path from "path";
 import { fileURLToPath } from "url";
+import { randomBytes } from "crypto";
+import { readFileSync } from "fs";
 import appConfig from "./utils/app-config.js";
 import { APP_SESSION_KEY, API_PATH_V1, APP_PATH } from "./constants.js";
 import log4js from "log4js";
@@ -53,24 +55,20 @@ function create(callback) {
 	app.use(compression());
 
 	// Content Security Policy.
-	// style-src retains 'unsafe-inline' for two reasons:
-	//   1. CodeMirror 6 (expression editor) injects CSS via StyleModule/style-mod
-	//      which creates <style> tags at runtime. Applications can eliminate this
-	//      by passing propertiesConfig.cspNonce to <CommonProperties>.
-	//   2. The harness demo components use many React style={{ ... }} props with
-	//      standard CSS properties; the harness cannot be fully hardened.
-	// The cspNonce field in propertiesConfig is the documented path for real
-	// applications that serve their HTML dynamically and can inject a nonce.
-	// script-src retains 'unsafe-inline' for the HMR dev toolchain.
+	// A fresh nonce is generated for every request and embedded in the HTML
+	// response as window.__CSP_NONCE__ so that client code (e.g. CommonProperties)
+	// can pass it to components that inject <style> tags at runtime.
+	// script-src retains 'unsafe-inline' for the HMR dev toolchain only.
 	// Violations are logged via /csp-report for ongoing review.
 	app.use((_req, res, next) => {
+		res.locals.cspNonce = randomBytes(16).toString("base64");
 		res.setHeader("Reporting-Endpoints", "csp-endpoint=\"/csp-report\"");
 		res.setHeader(
 			"Content-Security-Policy",
 			[
 				"default-src 'self'",
 				"script-src 'self' 'unsafe-inline'",
-				"style-src 'self' 'unsafe-inline'",
+				`style-src 'self' 'nonce-${res.locals.cspNonce}'`,
 				"font-src 'self' data:",
 				"img-src 'self' data:",
 				"connect-src 'self'",
@@ -114,12 +112,42 @@ function create(callback) {
 	}));
 
 	// Configure Development tools
+	let devCompiler = null;
 	if (!isProduction) {
 		logger.info("In development mode; using webpack with HMR");
-		_configureHmr(app);
+		devCompiler = _configureHmr(app);
 	}
 
-	app.use(express.static(path.join(__dirname, "../.build")));
+	app.use(express.static(path.join(__dirname, "../.build"), { index: false }));
+
+	// Serve index.html dynamically so the CSP nonce can be injected.
+	// In dev mode the HTML is read from webpack's in-memory filesystem (populated
+	// by HtmlWebpackPlugin) so that the nonce is applied to the compiled output.
+	// In production the HTML is read from the pre-built .build directory.
+	app.get("/", async(_req, res) => {
+		const nonce = res.locals.cspNonce;
+		let template;
+		if (devCompiler) {
+			const outputFs = (await devCompiler).outputFileSystem;
+			const htmlPath = path.join(__dirname, "../.build", "index.html");
+			template = await new Promise((resolve, reject) => {
+				outputFs.readFile(htmlPath, "utf8", (err, data) => {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(data);
+					}
+				});
+			});
+		} else {
+			template = readFileSync(path.join(__dirname, "../.build", "index.html"), "utf8");
+		}
+		const html = template.replace(
+			"<head>",
+			`<head>\n  <script nonce="${nonce}">window.__CSP_NONCE__="${nonce}";</script>`
+		);
+		res.type("html").send(html);
+	});
 
 	app.use(log4jsUtils.getRequestLogger());
 
@@ -164,6 +192,13 @@ async function _configureHmr(app) {
 
 	// load images and styles from asserts folder in development mode
 	app.use(express.static(path.join(__dirname, "../assets")));
+
+	// Return a Promise that resolves with the compiler only after the first
+	// webpack build completes, so the in-memory index.html exists before
+	// any browser request tries to read it.
+	return new Promise((resolve) => {
+		compiler.hooks.done.tap("harness-ready", () => resolve(compiler));
+	});
 }
 
 export default {

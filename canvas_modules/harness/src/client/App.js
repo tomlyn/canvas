@@ -2333,7 +2333,8 @@ class App extends React.Component {
 			showCharacterCounter: this.state.showCharacterCounter,
 			locale: this.locale,
 			iconSwitch: this.state.iconSwitch,
-			enableTanstackTable: this.state.enableTanstackTable
+			enableTanstackTable: this.state.enableTanstackTable,
+			cspNonce: window.__CSP_NONCE__
 		};
 	}
 
@@ -2413,7 +2414,8 @@ class App extends React.Component {
 					}
 				}
 			},
-			enableLinksOverNodes: this.state.selectedLinksOverNodes
+			enableLinksOverNodes: this.state.selectedLinksOverNodes,
+			cspNonce: window.__CSP_NONCE__
 		};
 
 		return canvasConfig;
